@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>300</x>
+      <y>50</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>type=initial</panel_attributes>
+    <additional_attributes/>
+  </element>
+
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>270</x>
+      <y>100</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Inicialización
+Sistema</panel_attributes>
+    <additional_attributes/>
+  </element>
+
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>310</x>
+      <y>60</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10;40;10;10</additional_attributes>
+  </element>
+
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>270</x>
+      <y>170</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Crear
+ControlTower</panel_attributes>
+    <additional_attributes/>
+  </element>
+
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>310</x>
+      <y>130</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10;40;10;10</additional_attributes>
+  </element>
+
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>500</x>
+      <y>170</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Initialize
+Runway</panel_attributes>
+    <additional_attributes/>
+  </element>
+
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>500</x>
+      <y>240</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Initialize
+Gate</panel_attributes>
+    <additional_attributes/>
+  </element>
+
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>360</x>
+      <y>180</y>
+      <w>160</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>140;10;10;10</additional_attributes>
+  </element>
+
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>270</x>
+      <y>240</y>
+      <w>100</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>type=decision
+¿Hay pista
+disponible?</panel_attributes>
+    <additional_attributes/>
+  </element>
+
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>310</x>
+      <y>200</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10;40;10;10</additional_attributes>
+  </element>
+
+  <!-- Continúa el diagrama con más elementos... -->
+
+  <!-- Funciones paralelas -->
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>700</x>
+      <y>170</y>
+      <w>120</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>requestLanding
+--
+Mutex lock
+Check availability
+Return index</panel_attributes>
+    <additional_attributes/>
+  </element>
+
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>700</x>
+      <y>240</y>
+      <w>120</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>assignGate
+--
+Mutex lock
+Check availability
+Return index</panel_attributes>
+    <additional_attributes/>
+  </element>
+
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>700</x>
+      <y>310</y>
+      <w>120</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>releaseRunway
+--
+Mutex lock
+Set unoccupied
+Mutex unlock</panel_attributes>
+    <additional_attributes/>
+  </element>
+
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>700</x>
+      <y>380</y>
+      <w>120</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>releaseGate
+--
+Mutex lock
+Set unoccupied
+Mutex unlock</panel_attributes>
+    <additional_attributes/>
+  </element>
+
+  <!-- Estados finales -->
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>300</x>
+      <y>500</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>type=final</panel_attributes>
+    <additional_attributes/>
+  </element>
+
+  <!-- Notas explicativas -->
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>50</x>
+      <y>50</y>
+      <w>140</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>Cada avión se ejecuta
+en su propia goroutine
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
