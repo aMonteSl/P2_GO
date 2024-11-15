@@ -2,151 +2,129 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"sync"
 	"time"
-	"math/rand"
 )
 
-// Estructura para representar una pista de aterrizaje
-type Runway struct {
-	useTime   int
-	variation int
-	isOccupied bool
-	mutex     sync.Mutex
+// Configuración general
+type Config struct {
+	Time    int // Tiempo base de operación
+	StdTime int // Variación en el tiempo
+	Buffer  int // Capacidad máxima de espera (buffer)
 }
 
-// Estructura para representar una puerta de desembarque
-type Gate struct {
-	useTime   int
-	variation int
-	isOccupied bool
-	mutex     sync.Mutex
+// Avión
+type Airplane struct {
+	id int
 }
 
-// Estructura para representar un avión
-type Plane struct {
-	id        int
-	hasLanded bool
-}
-
-// Estructura para representar la torre de control
+// Torre de control
 type ControlTower struct {
-	runways    []Runway
-	gates      []Gate
-	maxWaitTime int
+	runwayChan chan *Runway
+	config     Config
+	wg         *sync.WaitGroup
 }
 
-// Función para inicializar una pista
-func initializeRunway(runway *Runway, useTime int, variation int) {
-	runway.useTime = useTime
-	runway.variation = variation
-	runway.isOccupied = false
+// Pista
+type Runway struct {
+	id      int
+	gateChan chan *Gate
+	config   Config
 }
 
-// Función para inicializar una puerta
-func initializeGate(gate *Gate, useTime int, variation int) {
-	gate.useTime = useTime
-	gate.variation = variation
-	gate.isOccupied = false
+// Puerta de desembarque
+type Gate struct {
+	id      int
+	config  Config
 }
 
-// Función para solicitar aterrizaje en una pista
-func (tower *ControlTower) requestLanding(plane *Plane) int {
-	for i := 0; i < len(tower.runways); i++ {
-		tower.runways[i].mutex.Lock()
-		if !tower.runways[i].isOccupied {
-			tower.runways[i].isOccupied = true
-			plane.hasLanded = true
-			tower.runways[i].mutex.Unlock()
-			return i // Retorna el índice de la pista asignada
-		}
-		tower.runways[i].mutex.Unlock()
-	}
-	return -1 // Si no hay pistas disponibles
+// Simulación del tiempo con variación
+func simulateTime(baseTime, stdTime int) {
+	duration := time.Duration(baseTime+rand.Intn(2*stdTime+1)-stdTime) * time.Millisecond
+	time.Sleep(duration)
 }
 
-// Función para liberar una pista
-func (tower *ControlTower) releaseRunway(runwayIndex int) {
-	tower.runways[runwayIndex].mutex.Lock()
-	tower.runways[runwayIndex].isOccupied = false
-	tower.runways[runwayIndex].mutex.Unlock()
+// Torre de Control: gestión de aviones hacia pistas
+func (ct *ControlTower) handleAirplane(airplane *Airplane) {
+	defer ct.wg.Done()
+
+	fmt.Printf("Avión %d: Solicita pista...\n", airplane.id)
+	runway := <-ct.runwayChan
+	fmt.Printf("Avión %d: Asignada pista %d.\n", airplane.id, runway.id)
+	simulateTime(ct.config.Time, ct.config.StdTime)
+
+	// Avión pasa a la pista para aterrizar
+	runway.handleAirplane(airplane)
+
+	// Liberar pista
+	ct.runwayChan <- runway
+	fmt.Printf("Avión %d: Liberó pista %d.\n", airplane.id, runway.id)
 }
 
-// Función para asignar una puerta de desembarque
-func (tower *ControlTower) assignGate(plane *Plane) int {
-	for i := 0; i < len(tower.gates); i++ {
-		tower.gates[i].mutex.Lock()
-		if !tower.gates[i].isOccupied {
-			tower.gates[i].isOccupied = true
-			tower.gates[i].mutex.Unlock()
-			return i // Retorna el índice de la puerta asignada
-		}
-		tower.gates[i].mutex.Unlock()
-	}
-	return -1 // Si no hay puertas disponibles
+// Pista: gestión de aviones hacia puertas
+func (r *Runway) handleAirplane(airplane *Airplane) {
+	fmt.Printf("Avión %d: Aterrizando en pista %d...\n", airplane.id, r.id)
+	simulateTime(r.config.Time, r.config.StdTime)
+	fmt.Printf("Avión %d: Aterrizó en pista %d. Solicita puerta...\n", airplane.id, r.id)
+
+	// Solicita puerta
+	gate := <-r.gateChan
+	fmt.Printf("Avión %d: Asignada puerta %d.\n", airplane.id, gate.id)
+
+	// Puerta desembarca pasajeros
+	gate.handleAirplane(airplane)
+
+	// Liberar puerta
+	r.gateChan <- gate
+	fmt.Printf("Avión %d: Liberó puerta %d.\n", airplane.id, gate.id)
 }
 
-// Función para liberar una puerta
-func (tower *ControlTower) releaseGate(gateIndex int) {
-	tower.gates[gateIndex].mutex.Lock()
-	tower.gates[gateIndex].isOccupied = false
-	tower.gates[gateIndex].mutex.Unlock()
+// Puerta: desembarque
+func (g *Gate) handleAirplane(airplane *Airplane) {
+	fmt.Printf("Avión %d: Desembarcando en puerta %d...\n", airplane.id, g.id)
+	simulateTime(g.config.Time, g.config.StdTime)
+	fmt.Printf("Avión %d: Pasajeros desembarcados en puerta %d.\n", airplane.id, g.id)
+
+	// Simular despegue
+	fmt.Printf("Avión %d: Despegando tras completar desembarque en puerta %d...\n", airplane.id, g.id)
+	simulateTime(g.config.Time, g.config.StdTime)
+	fmt.Printf("Avión %d: Despegó exitosamente.\n", airplane.id)
 }
 
-// Función principal para simular el proceso de aterrizaje y desembarque
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
-	// Inicialización de la torre de control, pistas y puertas
-	tower := ControlTower{
-		runways:    make([]Runway, 3), // Ejemplo con 3 pistas
-		gates:      make([]Gate, 2),   // Ejemplo con 2 puertas
-		maxWaitTime: 10,
+	// Configuración
+	numAirplanes := 10   // Número de aviones
+	numRunways := 3      // Número de pistas
+	numGates := 5        // Número de puertas
+
+	towerConfig := Config{Time: 100, StdTime: 20, Buffer: numRunways} // Torre de control
+	runwayConfig := Config{Time: 200, StdTime: 50, Buffer: numRunways} // Pistas
+	gateConfig := Config{Time: 300, StdTime: 100, Buffer: numGates}    // Puertas
+
+	// Inicialización de la torre de control
+	runwayChan := make(chan *Runway, towerConfig.Buffer)
+	wg := &sync.WaitGroup{}
+
+	// Inicialización de pistas y puertas
+	gateChan := make(chan *Gate, gateConfig.Buffer)
+	for i := 1; i <= numGates; i++ {
+		gateChan <- &Gate{id: i, config: gateConfig}
+	}
+	for i := 1; i <= numRunways; i++ {
+		runwayChan <- &Runway{id: i, gateChan: gateChan, config: runwayConfig}
 	}
 
-	// Inicialización de las pistas y puertas con tiempos de uso y variación
-	for i := range tower.runways {
-		initializeRunway(&tower.runways[i], 10, 2)
-	}
-	for i := range tower.gates {
-		initializeGate(&tower.gates[i], 5, 1)
-	}
+	// Torre de control
+	controlTower := &ControlTower{runwayChan: runwayChan, config: towerConfig, wg: wg}
 
-	// Simulación de llegada de aviones
-	var wg sync.WaitGroup
-	planes := []Plane{
-		{id: 1}, {id: 2}, {id: 3},
-	}
-
-	for i := range planes {
+	// Simulación de aviones
+	for i := 1; i <= numAirplanes; i++ {
 		wg.Add(1)
-		go func(plane *Plane) {
-			defer wg.Done()
-
-			// Solicita aterrizaje
-			runwayIndex := tower.requestLanding(plane)
-			if runwayIndex != -1 {
-				fmt.Printf("Avión %d aterrizó en la pista %d\n", plane.id, runwayIndex)
-
-				// Espera el tiempo de uso de la pista antes de liberarla
-				time.Sleep(time.Duration(tower.runways[runwayIndex].useTime+rand.Intn(tower.runways[runwayIndex].variation)) * time.Second)
-				tower.releaseRunway(runwayIndex)
-
-				// Asigna una puerta de desembarque
-				gateIndex := tower.assignGate(plane)
-				if gateIndex != -1 {
-					fmt.Printf("Avión %d desembarca en la puerta %d\n", plane.id, gateIndex)
-
-					// Espera el tiempo de uso de la puerta antes de liberarla
-					time.Sleep(time.Duration(tower.gates[gateIndex].useTime+rand.Intn(tower.gates[gateIndex].variation)) * time.Second)
-					tower.releaseGate(gateIndex)
-				} else {
-					fmt.Printf("No hay puertas disponibles para el avión %d\n", plane.id)
-				}
-			} else {
-				fmt.Printf("No hay pistas disponibles para el avión %d\n", plane.id)
-			}
-		}(&planes[i])
+		airplane := &Airplane{id: i}
+		go controlTower.handleAirplane(airplane)
 	}
 
 	wg.Wait()
