@@ -1,17 +1,20 @@
 # Práctica 2: Sistemas Distribuidos - Gestión de Aeropuerto ✈️
 
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/aMonteSl/P2_GO.git)
+
+
 ## 📋 Tabla de Contenidos
-1. [Introducción](#introducción)
-2. [Objetivo del Programa](#objetivo-del-programa)
-3. [Descripción Técnica](#descripción-técnica)
+1. [Introducción](#-introducción)
+2. [Objetivo del Programa](#-objetivo-del-programa)
+3. [Descripción Técnica](#%EF%B8%8F-descripción-técnica)
    - [Componentes del Sistema](#componentes-del-sistema)
    - [Concurrencia y Sincronización](#concurrencia-y-sincronización)
    - [Configuración y Parámetros](#configuración-y-parámetros)
-4. [Diagramas de Flujo](#diagramas-de-flujo)
-5. [Resultados de las Pruebas](#resultados-de-las-pruebas)
+4. [Diagramas de Flujo](#-diagramas-de-flujo)
+5. [Resultados de las Pruebas](#-resultados-de-las-pruebas)
 6. [Ejemplos de Uso](#ejemplos-de-uso)
-7. [Conclusiones](#conclusiones)
-8. [Código Fuente](#código-fuente)
+7. [Conclusiones](#-conclusiones)
+8. [Código Fuente](#-código-fuente)
 
 
 ## 🌟 Introducción
@@ -79,7 +82,7 @@ Se busca:
 ### Diagrama de flujo
 ![Gestión de Aviones](img/DiagramUML.png)
 
-> Nota: Los diagramas han sido generados utilizando Mermaid.
+> Nota: Los diagramas han sido creados utilizando Mermaid.
 
 
 ---
@@ -261,6 +264,8 @@ Simulación completada.
 ## 📂 Código Fuente
 
 El código completo del programa y las pruebas están disponibles en el archivo `main.go` y `main_test.go`. Se adjuntan en el apéndice de este documento o están disponibles en el repositorio indicado.
+
+Enlace al [GitHub](https://github.com/aMonteSl/P2_GO.git).
 
 ---
 
