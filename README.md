@@ -1,6 +1,20 @@
-# Práctica 2: Sistemas Distribuidos - Gestión de Aeropuerto
+# Práctica 2: Sistemas Distribuidos - Gestión de Aeropuerto ✈️
 
-## Introducción
+## 📋 Tabla de Contenidos
+1. [Introducción](#introducción)
+2. [Objetivo del Programa](#objetivo-del-programa)
+3. [Descripción Técnica](#descripción-técnica)
+   - [Componentes del Sistema](#componentes-del-sistema)
+   - [Concurrencia y Sincronización](#concurrencia-y-sincronización)
+   - [Configuración y Parámetros](#configuración-y-parámetros)
+4. [Diagramas de Flujo](#diagramas-de-flujo)
+5. [Resultados de las Pruebas](#resultados-de-las-pruebas)
+6. [Ejemplos de Uso](#ejemplos-de-uso)
+7. [Conclusiones](#conclusiones)
+8. [Código Fuente](#código-fuente)
+
+
+## 🌟 Introducción
 
 En esta práctica se implementa un modelo concurrente en **Go** para simular las operaciones de un aeropuerto. La simulación incluye el aterrizaje, desembarque y despegue de aviones utilizando mecanismos concurrentes como **goroutines** y **canales**. Se evalúa el rendimiento del sistema bajo diferentes configuraciones, considerando tiempos de espera y límites de capacidad.
 
@@ -8,7 +22,7 @@ El propósito es fortalecer el manejo de concurrencia en **Go**, con un enfoque 
 
 ---
 
-## Objetivo del Programa
+## 🎯 Objetivo del Programa
 
 El programa tiene como objetivo simular el flujo de aviones en un aeropuerto de manera concurrente. Esto incluye:
 1. **Aterrizaje**: Los aviones son asignados a pistas disponibles por una torre de control.
@@ -22,7 +36,7 @@ Se busca:
 
 ---
 
-## Descripción Técnica
+## 🛠️ Descripción Técnica
 
 ### Componentes del Sistema
 1. **Aviones (`Airplane`)**:
@@ -57,7 +71,20 @@ Se busca:
 
 ---
 
-## Resultados de las Pruebas
+## 📊 Diagramas de Flujo
+
+### Flujo Principal del Programa
+![Flujo Principal](img/Detailed.png)
+
+### Diagrama de flujo
+![Gestión de Aviones](img/DiagramUML.png)
+
+> Nota: Los diagramas han sido generados utilizando Mermaid.
+
+
+---
+
+## 🧪 Resultados de las Pruebas
 
 ### Configuraciones Probadas
 1. **Simulación básica**:
@@ -91,7 +118,7 @@ Se busca:
 
 ---
 
-## Conclusiones
+## 📜 Conclusiones
 
 1. **Estabilidad del Sistema**:
    - El sistema respondió correctamente a todas las configuraciones probadas.
@@ -113,7 +140,125 @@ Se busca:
 
 ---
 
-## Código Fuente
+## 🚀 Ejemplos de Uso
+
+### Ejemplo Básico
+```bash
+adrian@adrian-System-Product-Name:~/Escritorio/SistemasDistribuidos/P2_GO$ go run main.go 
+Avión 10: Solicita pista...
+Avión 10: Asignada pista 1.
+Avión 1: Solicita pista...
+Avión 1: Asignada pista 2.
+Avión 2: Solicita pista...
+Avión 2: Asignada pista 3.
+Avión 3: Solicita pista...
+Avión 4: Solicita pista...
+Avión 5: Solicita pista...
+Avión 6: Solicita pista...
+Avión 7: Solicita pista...
+Avión 8: Solicita pista...
+Avión 9: Solicita pista...
+Avión 1: Aterrizando en pista 2...
+Avión 10: Aterrizando en pista 1...
+Avión 2: Aterrizando en pista 3...
+Avión 10: Aterrizó en pista 1. Solicita puerta...
+Avión 10: Asignada puerta 1.
+Avión 10: Desembarcando en puerta 1...
+Avión 2: Aterrizó en pista 3. Solicita puerta...
+Avión 2: Asignada puerta 2.
+Avión 2: Desembarcando en puerta 2...
+Avión 1: Aterrizó en pista 2. Solicita puerta...
+Avión 1: Asignada puerta 3.
+Avión 1: Desembarcando en puerta 3...
+Avión 2: Pasajeros desembarcados en puerta 2.
+Avión 2: Despegando tras completar desembarque en puerta 2...
+Avión 1: Pasajeros desembarcados en puerta 3.
+Avión 1: Despegando tras completar desembarque en puerta 3...
+Avión 10: Pasajeros desembarcados en puerta 1.
+Avión 10: Despegando tras completar desembarque en puerta 1...
+Avión 2: Despegó exitosamente.
+Avión 2: Liberó puerta 2.
+Avión 2: Liberó pista 3.
+Avión 3: Asignada pista 3.
+Avión 1: Despegó exitosamente.
+Avión 1: Liberó puerta 3.
+Avión 1: Liberó pista 2.
+Avión 4: Asignada pista 2.
+Avión 3: Aterrizando en pista 3...
+Avión 4: Aterrizando en pista 2...
+Avión 3: Aterrizó en pista 3. Solicita puerta...
+Avión 3: Asignada puerta 4.
+Avión 3: Desembarcando en puerta 4...
+Avión 10: Despegó exitosamente.
+Avión 10: Liberó puerta 1.
+Avión 10: Liberó pista 1.
+Avión 5: Asignada pista 1.
+Avión 4: Aterrizó en pista 2. Solicita puerta...
+Avión 4: Asignada puerta 5.
+Avión 4: Desembarcando en puerta 5...
+Avión 5: Aterrizando en pista 1...
+Avión 5: Aterrizó en pista 1. Solicita puerta...
+Avión 5: Asignada puerta 2.
+Avión 5: Desembarcando en puerta 2...
+Avión 3: Pasajeros desembarcados en puerta 4.
+Avión 3: Despegando tras completar desembarque en puerta 4...
+Avión 4: Pasajeros desembarcados en puerta 5.
+Avión 4: Despegando tras completar desembarque en puerta 5...
+Avión 5: Pasajeros desembarcados en puerta 2.
+Avión 5: Despegando tras completar desembarque en puerta 2...
+Avión 3: Despegó exitosamente.
+Avión 3: Liberó puerta 4.
+Avión 3: Liberó pista 3.
+Avión 6: Asignada pista 3.
+Avión 6: Aterrizando en pista 3...
+Avión 4: Despegó exitosamente.
+Avión 4: Liberó puerta 5.
+Avión 4: Liberó pista 2.
+Avión 7: Asignada pista 2.
+Avión 6: Aterrizó en pista 3. Solicita puerta...
+Avión 6: Asignada puerta 3.
+Avión 6: Desembarcando en puerta 3...
+Avión 5: Despegó exitosamente.
+Avión 5: Liberó puerta 2.
+Avión 5: Liberó pista 1.
+Avión 8: Asignada pista 1.
+Avión 7: Aterrizando en pista 2...
+Avión 8: Aterrizando en pista 1...
+Avión 7: Aterrizó en pista 2. Solicita puerta...
+Avión 7: Asignada puerta 1.
+Avión 7: Desembarcando en puerta 1...
+Avión 6: Pasajeros desembarcados en puerta 3.
+Avión 6: Despegando tras completar desembarque en puerta 3...
+Avión 8: Aterrizó en pista 1. Solicita puerta...
+Avión 8: Asignada puerta 4.
+Avión 8: Desembarcando en puerta 4...
+Avión 7: Pasajeros desembarcados en puerta 1.
+Avión 7: Despegando tras completar desembarque en puerta 1...
+Avión 6: Despegó exitosamente.
+Avión 6: Liberó puerta 3.
+Avión 6: Liberó pista 3.
+Avión 9: Asignada pista 3.
+Avión 8: Pasajeros desembarcados en puerta 4.
+Avión 8: Despegando tras completar desembarque en puerta 4...
+Avión 7: Despegó exitosamente.
+Avión 7: Liberó puerta 1.
+Avión 7: Liberó pista 2.
+Avión 9: Aterrizando en pista 3...
+Avión 9: Aterrizó en pista 3. Solicita puerta...
+Avión 9: Asignada puerta 5.
+Avión 9: Desembarcando en puerta 5...
+Avión 8: Despegó exitosamente.
+Avión 8: Liberó puerta 4.
+Avión 8: Liberó pista 1.
+Avión 9: Pasajeros desembarcados en puerta 5.
+Avión 9: Despegando tras completar desembarque en puerta 5...
+Avión 9: Despegó exitosamente.
+Avión 9: Liberó puerta 5.
+Avión 9: Liberó pista 3.
+Simulación completada.
+```
+
+## 📂 Código Fuente
 
 El código completo del programa y las pruebas están disponibles en el archivo `main.go` y `main_test.go`. Se adjuntan en el apéndice de este documento o están disponibles en el repositorio indicado.
 
